@@ -31,7 +31,7 @@ class OaMail(object):
 
     @property
     def mail_from(self):
-        return self._from
+        return self._mail_from
 
     @mail_from.setter
     def mail_from(self, element: WebElement):
