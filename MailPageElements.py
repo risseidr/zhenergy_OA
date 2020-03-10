@@ -9,7 +9,9 @@
 ------------      -------    --------    -----------
 2020-3-7 12:01   risseidr   1.0         None
 """
-
+import win32api
+import win32con
+import win32gui
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.ie.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
@@ -140,15 +142,21 @@ class SingleMailPageElements(object):
         return True
 
     def download_all(self):
-        sleep(0.2)
+        hwnd_now = win32gui.GetForegroundWindow()
+        print('%x' % hwnd_now)
+        hwnd_mail = win32gui.FindWindow(0, "邮件系统-内网邮件 - Internet Explorer")
+        print('%x' % hwnd_mail)
+        shell = win32con.client.Dispatch("WScript.Shell")
+        shell.SendKeys('%')
+        win32gui.ShowWindow(hwnd_mail, win32con.SW_SHOWNA)
+        win32gui.SetForegroundWindow(hwnd_mail)
+        sleep(0.1)
         self._download_button.click()
-        sleep(0.2)
-        hwnd = FindWindow(0, "确定")
-        SendMessage(hwnd, WM_KEYDOWN, VK_RETURN, 0)
-        SendMessage(hwnd, WM_KEYUP, VK_RETURN, 0)
-        sleep(0.2)
-
-
+        sleep(0.1)
+        win32api.keybd_event(0x0D, 0, 0, 0)
+        win32api.keybd_event(0x0D, win32con.KEYEVENTF_KEYUP, 0)
+        win32gui.ShowWindow(hwnd_now, win32con.SW_RESTORE)
+        win32gui.SetForegroundWindow(hwnd_now)
 
     def mail_from(self):
         return self._from
