@@ -17,9 +17,6 @@ from selenium.webdriver.ie.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 from datetime import datetime
 from time import sleep
-from win32api import SendMessage
-from win32gui import FindWindow, FindWindowEx
-from win32con import WM_KEYUP, WM_KEYDOWN, VK_RETURN
 
 
 def format_time(str_time: str):
@@ -116,7 +113,7 @@ class BriefInfo(object):
 
 
 class SingleMailPageElements(object):
-    def __init__(self, driver: WebDriver, attachment_flag: bool = True):
+    def __init__(self, driver: WebDriver, attachment_flag: bool = False):
         self._mail_driver = driver
         self._mail_driver.implicitly_wait(3)
         mail_frame = self._mail_driver.find_element_by_css_selector(
@@ -125,14 +122,15 @@ class SingleMailPageElements(object):
         self._mail_driver.switch_to.active_element
         self._close_button = self._mail_driver.find_element_by_css_selector(
             'html > body > form > div:nth-of-type(3) > div > a:nth-of-type(1)')
+        self._attachment_flag = attachment_flag
         if attachment_flag:
             self._download_button = self._mail_driver.find_element_by_css_selector('a#dfAll')
         self._from = self._mail_driver.find_element_by_css_selector(
             'html > body > form > div.row-container > table > tbody > tr:nth-child(1) > td:nth-child(2) > '
             'font:nth-child(1)').text
         self._subject = self._mail_driver.find_element_by_css_selector(
-            'body > form > div.row-container > table > tbody > tr:nth-child(3) > td:nth-child(2) > b').text
-        self._mail = self._mail_driver.find_element_by_css_selector('div.row-container').get_attribute('innerHTML')
+            'body > form > div.row-container > table > tbody > tr:nth-child(3) > td:nth-child(2) > b')
+        self._mail = self._mail_driver.find_element_by_css_selector('div.row-container')
         self._time = format_time(self._mail_driver.find_element_by_css_selector(
             'html > body > form > div.row-container > table > tbody > tr:nth-child(1) > td:nth-child(2) > '
             'font:nth-child(4)').text)
@@ -158,28 +156,22 @@ class SingleMailPageElements(object):
         win32gui.ShowWindow(hwnd_now, win32con.SW_RESTORE)
         win32gui.SetForegroundWindow(hwnd_now)
 
-    def mail_from(self):
+    @property
+    def mail_from(self) -> str:
         return self._from
 
-    def subject(self):
-        return self._subject
+    @property
+    def subject(self) -> str:
+        return self._subject.text
 
-    def mail(self):
-        return self._mail
+    @property
+    def mail(self) -> str:
+        return self._mail.get_attribute('innerHTML')
 
-    def mail_time(self):
-        return self._time
+    @property
+    def mail_time(self) -> datetime:
+        return format_time(self._time.text)
 
-    def save(self, path: str, save_type='mail_from_first') -> bool:
-        """save mail to computer
-
-        :param path:
-        :param save_type: 'mail_from_first' or 'time_first'
-        :return:
-        """
-        if save_type == 'mail_from_first':
-            return True
-        elif save_type == 'time_first':
-            return True
-        else:
-            return False
+    @property
+    def attachment_flag(self) -> bool:
+        return self._attachment_flag
