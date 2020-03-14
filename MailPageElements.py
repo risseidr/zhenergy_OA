@@ -28,12 +28,13 @@ def format_time(str_time: str):
 
 class BriefMailPageElements(object):
     def __init__(self, driver: WebDriver):
-        driver.implicitly_wait(10)
+        self._driver = driver
+        self._driver.implicitly_wait(10)
         self._next_page_button = driver.find_element_by_css_selector(
             'div#intraboxContent > div.panel-footer > nav > div.pageNav > span.nextPage')
         self._pre_page_button = driver.find_element_by_css_selector(
             'div#intraboxContent > div.panel-footer > nav > div.pageNav > span.prePage')
-        self._brief_tr = driver.find_elements_by_css_selector('tbody#intrabox_tBody > tr')
+        self._brief_tr = None
 
     def next_page(self):
         if 'page_ok' in str(self._next_page_button.get_attribute('class')):
@@ -52,7 +53,7 @@ class BriefMailPageElements(object):
             return False
 
     def brief_tr(self):
-        return self._brief_tr
+        return self._driver.find_elements_by_css_selector('tbody#intrabox_tBody > tr')
 
 
 class BriefInfo(object):
@@ -78,7 +79,7 @@ class BriefInfo(object):
 
     def open(self):
         sleep(0.1)
-        self._td_[4].click()
+        self._td_[4].find_element_by_xpath('.//a').click()
         sleep(0.5)
 
     def choose(self):

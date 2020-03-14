@@ -35,7 +35,7 @@ class MailFolder(object):
 
     def create_mail_folder(self):
         mail_path = os.path.join(self._root_dir, self._mail_from,
-                                 self._time.strftime('%y-%m-%d %H：%M：%S') + ' ' + self._subject)
+                                 self._time.strftime('%y-%m-%d %H：%M：%S') + ' ' + self.subject_to_folder_name())
         if not os.path.isdir(mail_path):
             os.mkdir(mail_path)
             self._mail_path = mail_path
@@ -48,6 +48,6 @@ class MailFolder(object):
 
     def transfer_mail_to_html(self):
         html = os.path.join(self._mail_path, '邮件.html')
-        with open('html', 'x') as file:
-            file.writable(self._mail)
+        with open(html, 'x') as file:
+            file.write(self._mail)
         file.close()
