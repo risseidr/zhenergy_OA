@@ -9,13 +9,23 @@
 ------------      -------    --------    -----------
 2020-3-14 17:29   risseidr   1.0         None
 """
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.ie.webdriver import *
 from time import sleep
-from MailPageElements import *
+
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.webdriver import WebDriver
+from selenium.webdriver.chrome.options import Options
+from MailPageElements import MailBox
 
 
 class LoginWeb(WebDriver):
+    def __init__(self, executable_path="chromedriver", port=0, options=None, service_args=None,
+                 desired_capabilities=None, service_log_path=None, chrome_options=None, keep_alive=True):
+        self.__chrome_options = chrome_options
+        self.__chrome_options = Options()
+        self.__chrome_options.binary_location = r'C:\Program Files\ntko controls\ntkochrome.exe'
+        super().__init__(executable_path, port, options, service_args, desired_capabilities, service_log_path,
+                         self.__chrome_options, keep_alive)
+
     def login(self, mailbox_num: int, username: str, password: str) -> MailBox:
         self.get('http://zntemail.zhenergy.com.cn/mail/znte/U' + str(mailbox_num) + '.nsf/index.html')
         self.implicitly_wait(5)

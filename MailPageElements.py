@@ -9,10 +9,7 @@
 ------------      -------    --------    -----------
 2020-3-7 12:01   risseidr   1.0         None
 """
-import win32api
-import win32con
-import win32gui
-from selenium.webdriver.common.keys import Keys
+
 from selenium.webdriver.ie.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.common.exceptions import NoSuchElementException
@@ -40,6 +37,7 @@ class MailBox(object):
         self._next_page_button = None
         self._pre_page_button = None
         self._mailbox_tr = None
+        self.mailbox_tr()
 
     def next_page(self) -> bool:
         """判断“下一页”能否点击，并点击
@@ -65,19 +63,25 @@ class MailBox(object):
             'div#intraboxContent > div.panel-footer > nav > div.pageNav > span.prePage')
         if 'page_ok' in str(self._pre_page_button.get_attribute('class')):
             self._pre_page_button.click()
-            sleep(0.5)
+            sleep(2)
             self.mailbox_tr()
             return True
         else:
             return False
 
-    def __getitem__(self, item):
+    def delete_choosed(self):
+        self._driver.find_element_by_css_selector(
+            'div#intraboxBody > div > div:nth-child(1) > div > div > div:nth-child(3) > button').click()
+        sleep(3)
+        self._driver.find_element_by_css_selector('a.layui-layer-btn0').click()
+        sleep(5)
+
+    def get_briefinfo(self, item):
         """返回索引BriefInfo
 
         :param item:
         :return:
         """
-        self.mailbox_tr()
         return BriefInfo(self._mailbox_tr[item].find_elements_by_xpath('.//td'))
 
     def mailbox_tr(self):
@@ -86,6 +90,10 @@ class MailBox(object):
         :return:
         """
         self._mailbox_tr = self._driver.find_elements_by_css_selector('tbody#intrabox_tBody > tr')
+        sleep(1)
+
+    def refresh_tr(self):
+        self.mailbox_tr()
 
 
 class BriefInfo(object):
