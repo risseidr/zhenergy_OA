@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 """
-@File    :   SingleMail.py
+@File    :   MailTag.py
 @Contact :   riseidr@hotmail.com
 @License :   (C)Copyright 2020
 
@@ -12,10 +12,6 @@
 """
 from datetime import datetime
 from time import sleep
-
-import win32api
-import win32con
-import win32gui
 from selenium.webdriver.ie.webdriver import WebDriver
 
 
@@ -26,7 +22,7 @@ def format_time(str_time: str):
         return datetime.strptime(str_time, '%Y-%m-%d %H:%M')
 
 
-class SingleMail(object):
+class MailTag(object):
     def __init__(self, driver: WebDriver, attachment_flag: bool = False):
         self._mail_driver = driver
         self._mail_driver.implicitly_wait(3)
@@ -50,21 +46,7 @@ class SingleMail(object):
         return True
 
     def download_all(self):
-        hwnd_now = win32gui.GetForegroundWindow()
-        print('%x' % hwnd_now)
-        hwnd_mail = win32gui.FindWindow(0, "邮件系统-内网邮件 - Internet Explorer")
-        print('%x' % hwnd_mail)
-        shell = win32con.client.Dispatch("WScript.Shell")
-        shell.SendKeys('%')
-        win32gui.ShowWindow(hwnd_mail, win32con.SW_SHOWNA)
-        win32gui.SetForegroundWindow(hwnd_mail)
-        sleep(0.1)
-        self._download_button.click()
-        sleep(0.1)
-        win32api.keybd_event(0x0D, 0, 0, 0)
-        win32api.keybd_event(0x0D, win32con.KEYEVENTF_KEYUP, 0)
-        win32gui.ShowWindow(hwnd_now, win32con.SW_RESTORE)
-        win32gui.SetForegroundWindow(hwnd_now)
+        pass
 
     @property
     def mail_from(self) -> str:

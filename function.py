@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 """
-@File    :   OaMail.py
+@File    :   function.py
 @Contact :   riseidr@hotmail.com
 @License :   (C)Copyright 2020
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 """
-@File    :   OaMail.py
+@File    :   MailPageElements.py
 @Contact :   riseidr@hotmail.com
 @License :   (C)Copyright 2020
 
@@ -10,93 +10,22 @@
 2020-3-7 12:01   risseidr   1.0         None
 """
 
-from selenium.webdriver.ie.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.common.exceptions import NoSuchElementException
 from datetime import datetime
 from time import sleep
 
-from SingleMail import SingleMail
+from MailTag import MailTag
 
 
 def format_time(str_time: str):
     if len(str_time) == 19:
-        return datetime.strptime(str_time, '%Y-%m-%d %H:%M:%S')
+        return datetime.strptime(str_time, '%m-%d-%Y %I:%M:%S %p')
     elif len(str_time) == 16:
-        return datetime.strptime(str_time, '%Y-%m-%d %H:%M')
+        return datetime.strptime(str_time, '%Y/%m/%d %H:%M')
 
 
-class MailBox(object):
-    def __init__(self, driver: WebDriver):
-        """
-
-        :param driver: 浏览器驱动
-        """
-        self._driver = driver
-        self._driver.implicitly_wait(5)
-        self._next_page_button = None
-        self._pre_page_button = None
-        self._mailbox_tr = None
-        self.mailbox_tr()
-
-    def next_page(self) -> bool:
-        """判断“下一页”能否点击，并点击
-
-        :return:
-        """
-        self._next_page_button = self._driver.find_element_by_css_selector(
-            'div#intraboxContent > div.panel-footer > nav > div.pageNav > span.nextPage')
-        if 'page_ok' in str(self._next_page_button.get_attribute('class')):
-            self._next_page_button.click()
-            sleep(0.5)
-            self.mailbox_tr()
-            return True
-        else:
-            return False
-
-    def pre_page(self) -> bool:
-        """判断“上一页”能否点击，并点击
-
-        :return:
-        """
-        self._pre_page_button = self._driver.find_element_by_css_selector(
-            'div#intraboxContent > div.panel-footer > nav > div.pageNav > span.prePage')
-        if 'page_ok' in str(self._pre_page_button.get_attribute('class')):
-            self._pre_page_button.click()
-            sleep(2)
-            self.mailbox_tr()
-            return True
-        else:
-            return False
-
-    def delete_choosed(self):
-        self._driver.find_element_by_css_selector(
-            'div#intraboxBody > div > div:nth-child(1) > div > div > div:nth-child(3) > button').click()
-        sleep(3)
-        self._driver.find_element_by_css_selector('a.layui-layer-btn0').click()
-        sleep(5)
-
-    def get_briefinfo(self, item):
-        """返回索引BriefInfo
-
-        :param item:
-        :return:
-        """
-        return BriefInfo(self._mailbox_tr[item].find_elements_by_xpath('.//td'))
-
-    def mailbox_tr(self):
-        """找到收件箱中的信息元素列表
-
-        :return:
-        """
-        self._mailbox_tr = self._driver.find_elements_by_css_selector('tbody#intrabox_tBody > tr')
-        sleep(1)
-
-    def refresh_tr(self):
-        self.mailbox_tr()
-
-
-class BriefInfo(object):
+class MailInfo(object):
     def __init__(self, td: [WebElement]):
         self._td = td
         self._checkbox = ''
@@ -120,7 +49,7 @@ class BriefInfo(object):
             print(e)
             print('to slow')
         self._td[0].parent.switch_to.frame(mail_frame)
-        return SingleMail(self._td[0].parent, self._attachment_flag)
+        return MailTag(self._td[0].parent, self._attachment_flag)
 
     def choose(self):
         self._checkbox = self._td[0].find_element_by_xpath('.//input')

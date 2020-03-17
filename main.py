@@ -1,9 +1,14 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 from datetime import datetime
-from Login import LoginWeb
+from Login import Login
+from MailIndexPage import MailIndexPage
+from Settings import Settings
 
-ie = LoginWeb()
+settings = Settings()
+
+index_page = MailIndexPage(Login(settings))
+
 mailbox = ie.login(14411, 'zhubinyuan', '12345678')
 print(datetime.now())
 
@@ -31,6 +36,6 @@ except IndexError:
 print(datetime.now())
 # inbox = BriefMailPageElements(driver)
 # for tr in inbox.brief_tr():
-#     mail_info = BriefInfo(tr)
+#     mail_info = MailInfo(tr)
 #     if mail_info.subject().find('收到： ') == 0:
 #         mail_info.set_del_tag()
