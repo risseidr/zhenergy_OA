@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 """
-@File    :   Mail_Box.py
+@File    :   MailBox.py
 @Contact :   riseidr@hotmail.com
 @License :   (C)Copyright 2020
 
@@ -28,7 +28,7 @@ class MailBox(WebElement):
         self._next_page_button = None
         self._pre_page_button = None
         self._tr = [WebElement]
-        super().__init__(div.parent, div.id_, div.w3c)
+        super().__init__(div.parent, div.id, div._w3c)
 
     def delete(self):
         self.find_element_by_xpath('.//div/div[1]/div/div[1]/div[button="删除"]/button').click()

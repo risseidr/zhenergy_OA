@@ -4,12 +4,14 @@ from datetime import datetime
 from Login import Login
 from MailIndexPage import MailIndexPage
 from Settings import Settings
+from content
+
+-main_
 
 settings = Settings()
 
 index_page = MailIndexPage(Login(settings))
-
-mailbox = ie.login(14411, 'zhubinyuan', '12345678')
+mailbox = MailBox()
 print(datetime.now())
 
 try:
