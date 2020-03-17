@@ -26,12 +26,12 @@ class MailIndexPage(object):
     @property
     def inbox(self) -> WebElement:
         """
-        click and then return element_div of inbox
+        click and then return element_div of td
 
-        :return:element_div of inbox
+        :return:element_div of td
         """
-        self._driver.find_element_by_css_selector('#nav-list > li:nth-child(1)').click()
-        self._inbox = self._driver.find_element_by_id('#intraboxBody')
+        self._driver.find_element_by_css_selector('#nav-list > li:nth-child(1) > a').click()
+        self._inbox = self._driver.find_element_by_css_selector('#intraboxBody')
         return self._inbox
 
     @property
@@ -41,8 +41,8 @@ class MailIndexPage(object):
 
         :return:element_div of draft_box
         """
-        self._driver.find_element_by_css_selector('#nav-list > li:nth-child(1)').click()
-        self._draft_box = self._driver.find_element_by_id('#draftBody')
+        self._driver.find_element_by_css_selector('#nav-list > li:nth-child(1) > a').click()
+        self._draft_box = self._driver.find_element_by_css_selector('#draftBody')
         return self._draft_box
 
     @property
@@ -52,8 +52,8 @@ class MailIndexPage(object):
 
         :return:element_div of send_box
         """
-        self._driver.find_element_by_css_selector('#nav-list > li:nth-child(3)').click()
-        self._send_box = self._driver.find_element_by_id('#sentBody')
+        self._driver.find_element_by_css_selector('#nav-list > li:nth-child(3) > a').click()
+        self._send_box = self._driver.find_element_by_css_selector('#sentBody')
         return self._send_box
 
     @property
@@ -63,8 +63,8 @@ class MailIndexPage(object):
 
         :return:element_div of trash_box
         """
-        self._driver.find_element_by_css_selector('#nav-list > li:nth-child(4)').click()
-        self._trash_box = self._driver.find_element_by_id('#trashBody')
+        self._driver.find_element_by_css_selector('#nav-list > li:nth-child(4) > a').click()
+        self._trash_box = self._driver.find_element_by_css_selector('#trashBody')
         return self._trash_box
 
     @property

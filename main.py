@@ -1,43 +1,33 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 from datetime import datetime
-from Login import Login
+
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.webdriver import WebDriver
+
+from login import login
 from MailIndexPage import MailIndexPage
 from Settings import Settings
-from content
+from content_main.MailBox import MailBox
 
--main_
-
+options = Options()
+options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
+chrome_driver = r'C:\Users\risseidr\AppData\Local\Programs\Python\Python38-32\chromedriver.exe'
+driver = WebDriver(chrome_driver, chrome_options=options)
+# driver = WebDriver(options=options)
+print(driver.title)
+driver.maximize_window()
 settings = Settings()
-
-index_page = MailIndexPage(Login(settings))
-mailbox = MailBox()
-print(datetime.now())
-
-try:
-    while True:
-        j = 0
-        while j < 50:
-            for i in range(j, 50):
-                inbox = mailbox.get_briefinfo(i)
-                j += 1
-                if '收到： ' in inbox.subject:
-                    inbox.choose()
-                    j -= 1
-            if j < 50:
-                mailbox.delete_choosed()
-                mailbox.refresh_tr()
-        if mailbox.next_page():
-            pass
-        else:
-            break
-except IndexError:
-    if IndexError.args[0] == 'list index out of range':
-        pass
+index_page = MailIndexPage(login(driver, settings)).inbox
+mailbox = MailBox(index_page)
 
 print(datetime.now())
-# inbox = BriefMailPageElements(driver)
-# for tr in inbox.brief_tr():
+
+mailbox.delete_mail()
+
+print(datetime.now())
+# td = BriefMailPageElements(driver)
+# for tr in td.brief_tr():
 #     mail_info = MailInfo(tr)
 #     if mail_info.subject().find('收到： ') == 0:
 #         mail_info.set_del_tag()

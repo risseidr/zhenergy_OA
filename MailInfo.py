@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 """
-@File    :   MailPageElements.py
+@File    :   MailInfo.py
 @Contact :   riseidr@hotmail.com
 @License :   (C)Copyright 2020
 

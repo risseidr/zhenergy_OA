@@ -13,7 +13,7 @@
 
 class Settings(object):
     def __init__(self):
-        self._mailbox_num = 'U14411'
+        self._mailbox_num = '14411'
         self._username = 'zhubinyuan'
         self._password = '12345678'
         self._save_root_path_ = r'%temp%'

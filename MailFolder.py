@@ -10,8 +10,9 @@
 2020-3-12-16:42   risseidr   1.0         None
 """
 
-import os, shutil, io
-from MailPageElements import SingleMailPageElements
+import os, shutil
+
+from MailTag import MailTag
 
 DOWNLOAD_DIR = r'C:\Users\zhubinyuan.ZHENERGY'
 ROOT_DIR = r'E:\98 邮件附件'
@@ -21,7 +22,7 @@ class MailFolder(object):
     _download_dir = DOWNLOAD_DIR
     _root_dir = ROOT_DIR
 
-    def __init__(self, mail: SingleMailPageElements):
+    def __init__(self, mail: MailTag):
         self._mail_from = mail.mail_from
         self._time = mail.mail_time
         self._subject = mail.subject
