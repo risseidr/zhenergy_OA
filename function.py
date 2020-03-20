@@ -9,3 +9,5 @@
 ------------      -------    --------    -----------
 2020-3-7 12:01   risseidr   1.0         None
 """
+import os
+print(os.getenv('USERPROFILE'))

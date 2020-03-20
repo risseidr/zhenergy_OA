@@ -49,6 +49,11 @@ class MailBox(object):
         self._fresh_tr()
 
     def sort_by_time(self, flag: str):
+        """
+
+        :param flag: 0:时间倒序 or 1时间顺序
+        :return:
+        """
         self._sort_btn = self._div.find_element_by_xpath(
             './/a/img[@src="/static_new/image/sortDesc.gif" or @src="/static_new/image/sortAsc.gif"]')
         if self._sort_btn.get_attribute('src') == '/static_new/image/sortAsc.gif':
