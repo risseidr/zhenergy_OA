@@ -18,6 +18,8 @@ from urllib import parse
 
 from selenium.webdriver.ie.webdriver import WebDriver
 
+from MailFolder import MailFolder
+
 
 def format_time(str_time: str):
     return datetime.strptime(str_time, '%Y-%m-%d %H:%M:%S')
@@ -31,15 +33,22 @@ class MailTag(object):
         self._subject = None
         self._mail = None
         self._time = None
-        self._attribute_links = []
-        self._attribute_names = []
-        self._get_attributes()
+        self._attachment_links = []
+        self._attachment_names = []
+        self._attachment_size = ''
+        self._get_attachments()
 
     def close(self):
         self._mail_driver.close()
 
     def download_all(self):
-        pass
+        mail_folder = MailFolder(self)
+        mail_folder.create_mail_folder()
+        mail_folder.transfer_mail_to_html()
+        for link in self.attachment_links:
+            self.download_attachment(link)
+        sleep(5)
+        mail_folder.move_attachments_to_mail_folder()
 
     @property
     def mail_from(self) -> str:
@@ -68,21 +77,28 @@ class MailTag(object):
             'font:nth-child(4)').text)
         return self._time
 
-    def _get_attributes(self):
+    def _get_attachments(self):
         links = self._mail_driver.find_elements_by_css_selector('div#divLinks > a')
         for a in links:
             path = urllib.parse.unquote(os.path.join(a.get_attribute('href')))
-            self._attribute_names.append(path[path.rfind(r'/') + 1:])
-            self._attribute_links.append(path)
+            self._attachment_names.append(path[path.rfind(r'/') + 1:])
+            self._attachment_links.append(path)
 
     @property
-    def attribute_links(self):
-        return self._attribute_links
+    def attachment_links(self):
+        return self._attachment_links
 
     @property
-    def attribute_names(self):
-        return self._attribute_names
+    def attachment_names(self):
+        return self._attachment_names
+
+    @property
+    def attachment_size(self):
+        return self._attachment_size
 
     def mail_local(self):
-        for name in self._attribute_names:
+        for name in self._attachment_names:
             self._mail = self._mail.replace(r"javascript:getFile('" + name + "')", '.\\' + name)
+
+    def download_attachment(self, link):
+        self._mail_driver.get(link)

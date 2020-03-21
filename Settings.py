@@ -11,8 +11,6 @@
 """
 import os
 
-from selenium import webdriver
-
 
 class Settings(object):
     def __init__(self):
@@ -26,8 +24,9 @@ class Settings(object):
         self._mailbox_num = '14411'
         self._username = 'zhubinyuan'
         self._password = '12345678'
-        self._save_root_path_ = os.getenv('USERPROFILE')
+        self._save_root_path_ = os.path.join('I:\\', '邮件')
         self._save_type = 0
+        self._temp_download_path = os.path.join(self._save_root_path_, 'temp')
 
     @property
     def chrome_dir(self):
@@ -64,3 +63,10 @@ class Settings(object):
     @property
     def save_type(self):
         return self._save_type
+
+    @property
+    def temp_download_path(self):
+        return self._temp_download_path
+
+
+settings = Settings()

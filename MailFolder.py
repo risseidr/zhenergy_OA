@@ -11,44 +11,45 @@
 """
 
 import os, shutil
+from time import sleep
 
-from MailTag import MailTag
-
-DOWNLOAD_DIR = r'C:\Users\zhubinyuan.ZHENERGY'
-ROOT_DIR = r'E:\98 邮件附件'
+from Settings import settings
 
 
 class MailFolder(object):
-    _download_dir = DOWNLOAD_DIR
-    _root_dir = ROOT_DIR
-
-    def __init__(self, mail: MailTag):
+    def __init__(self, mail):
         self._mail_from = mail.mail_from
         self._time = mail.mail_time
         self._subject = mail.subject
         self._mail = mail.mail
-        self._attachment_flag = mail.attachment_flag
-        self._attachments_name = mail._attachments_name
+        self._attachment_names = mail.attachment_names
         self._mail_path = None
 
     def subject_to_folder_name(self):
         return self._subject.replace(':', '：').replace('?', '？').replace('"', "'")
 
     def create_mail_folder(self):
-        mail_path = os.path.join(self._root_dir, self._mail_from,
-                                 self._time.strftime('%y-%m-%d %H：%M：%S') + ' ' + self.subject_to_folder_name())
+        mail_path = os.path.join(settings.save_root_path, self._mail_from,
+                                 self._time.strftime('%Y%m%d %H%M%S') + ' ' + self.subject_to_folder_name())
         if not os.path.isdir(mail_path):
-            os.mkdir(mail_path)
-            self._mail_path = mail_path
+            os.makedirs(mail_path)
+        self._mail_path = mail_path
 
     def move_attachments_to_mail_folder(self):
-        if self._attachment_flag:
-            for f in self._attachments_name:
-                file_path = os.path.join(self._download_dir, f)
-                shutil.move(file_path, self._mail_path)
+        if self._attachment_names:
+            for f in self._attachment_names:
+                while True:
+                    if f in os.listdir(settings.temp_download_path):
+                        file_path = os.path.join(settings.temp_download_path, f)
+                        shutil.move(file_path, self._mail_path)
+                        break
+                    sleep(0.05)
 
     def transfer_mail_to_html(self):
         html = os.path.join(self._mail_path, '邮件.html')
-        with open(html, 'x') as file:
-            file.write(self._mail)
-        file.close()
+        try:
+            with open(html, 'x') as file:
+                file.write(self._mail)
+            file.close()
+        except FileExistsError as e:
+            print(e)
