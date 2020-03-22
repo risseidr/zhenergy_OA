@@ -15,15 +15,15 @@ from startchrome import StartChrome
 def main():
     driver = StartChrome().start_chrome()
     print(driver.title)
-    driver.maximize_window()
+    driver.set_window_size(1366, 768)
     index_page = MailIndexPage(login(driver, settings)).inbox
     mailbox = MailBox(index_page)
 
     print(datetime.now())
 
     # mailbox.delete_mail()
-    mailtag = mailbox.get_mail_info(15).open()
-    mailtag.download_all()
+    mailbox.sort_by_time(1)
+    mailbox.download_mail()
     sleep(5)
 
     print(datetime.now())

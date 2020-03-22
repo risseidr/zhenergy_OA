@@ -14,6 +14,7 @@ from time import sleep
 from selenium.webdriver.remote.webelement import WebElement
 
 from MailInfo import MailInfo
+from MailTag import MailTag
 
 
 class MailBox(object):
@@ -48,7 +49,7 @@ class MailBox(object):
         self._div.parent.find_element_by_xpath('*//div[a="确定"]/a[1]').click()
         self._fresh_tr()
 
-    def sort_by_time(self, flag: str):
+    def sort_by_time(self, flag: int):
         """
 
         :param flag: 0:时间倒序 or 1时间顺序
@@ -111,7 +112,24 @@ class MailBox(object):
                             j -= 1
                     if j < len(self._tr):
                         self.delete()
-                if self.next_page() and len(self._tr) == 50:
+                if self.next_page():
+                    pass
+                else:
+                    break
+        except IndexError as e:
+            print(e)
+
+    def download_mail(self):
+        try:
+            while True:
+                for i in range(0, len(self._tr)):
+                    td = self.get_mail_info(i)
+                    td.open()
+                    mailtag = MailTag(self._div.parent)
+                    mailtag.download_all()
+                    sleep(0.5)
+                    mailtag.close()
+                if self.next_page():
                     pass
                 else:
                     break

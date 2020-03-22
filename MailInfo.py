@@ -33,9 +33,9 @@ class MailInfo(object):
 
     def open(self):
         self._td[4].find_element_by_xpath('.//a').click()
-        sleep(0.5)
+        sleep(0.2)
 
-        return MailTag(self._td[0].parent, self.subject)
+        return MailTag(self._td[0].parent)
 
     def choose(self):
         self._checkbox = self._td[0].find_element_by_xpath('.//input')
