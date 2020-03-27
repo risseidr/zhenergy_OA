@@ -24,7 +24,7 @@ class Settings(object):
         self._mailbox_num = '14411'
         self._username = 'zhubinyuan'
         self._password = '12345678'
-        self._save_root_path_ = os.path.join('I:\\', '邮件')
+        self._save_root_path_ = os.path.join('E:\\98 邮件附件\\')
         self._save_type = 0
 
     @property

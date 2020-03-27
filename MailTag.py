@@ -91,7 +91,7 @@ class MailTag(object):
             if r.status_code == requests.codes.ok:
                 data = r.content
                 file_path = os.path.join(self._mail_path, filename)
-                with open(file_path, "xb") as f:
+                with open(file_path, "wb") as f:
                     f.write(data)
 
     def _subject_to_folder_name(self):
@@ -108,9 +108,8 @@ class MailTag(object):
     def _transfer_mail_to_html(self):
         html = os.path.join(self._mail_path, '邮件.html')
         try:
-            with open(html, 'x', encoding='utf-8') as file:
+            with open(html, 'w', encoding='utf-8') as file:
                 file.write(self.mail)
-            file.close()
         except FileExistsError as e:
             print(e)
 
